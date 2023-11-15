@@ -3,10 +3,10 @@ import socket
 import pickle
 
 # Import custom modules
-from menu import Menu
-from game import Game
-from server import Server
-from client import Client
+from data.menu import Menu
+from data.game import Game
+from data.server import Server
+from data.client import Client
 
 # Test code
 if __name__ == "__main__":
