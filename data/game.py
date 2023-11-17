@@ -5,7 +5,7 @@ Teyetest - Clase Game
 # Import Python modules
 
 # Import custom modules
-from card import Card
+from data.card import Card
 
 # Game class
 class Game():

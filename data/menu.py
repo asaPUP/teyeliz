@@ -8,7 +8,7 @@ and start the game accordingly
 # import pygame
 
 # Import custom modules
-from player import Player
+from data.player import Player
 
 class Menu():
     def __init__(self):
