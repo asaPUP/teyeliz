@@ -1,6 +1,10 @@
 # Import Python modules
 import socket
 import pickle
+import pygame
+from pygame.locals import *
+import random
+import os
 
 # Import custom modules
 from data.menu import Menu
@@ -8,8 +12,27 @@ from data.game import Game
 from data.server import Server
 from data.client import Client
 
-# Test code
+# Main function
 if __name__ == "__main__":
+    # Main game loop
+
+    # Initialize pygame
+    pygame.init()
+
+    # Set window title
+    pygame.display.set_caption("Teyeliz")
+
+    # Set window size
+    WINDOW_SIZE = (760, 412)
+    WIDTH, HEIGHT = WINDOW_SIZE
+
+    # Create window
+    window = pygame.display.set_mode(WINDOW_SIZE)
+
+    # Load background image and scale
+    background_image = pygame.image.load("resources/graphics/bg/background.png")
+    background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
+
     # Create menu
     menu = Menu()
 
