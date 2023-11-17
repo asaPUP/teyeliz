@@ -1,10 +1,12 @@
 """
-Teyetest - Clase Client
+Teyeliz - Clase Client
 """
 
 # Import Python modules
 import socket
 import pickle
+
+# Import custom modules
 
 class Client():
     def __init__(self):

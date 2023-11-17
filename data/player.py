@@ -1,11 +1,11 @@
 """
-Teyetest - Clase Player
+Teyeliz - Clase Player
 """
 
 # Import Python modules
 
 # Import custom modules
-from card import Card
+from data.card import Card
 
 # Player class
 class Player():

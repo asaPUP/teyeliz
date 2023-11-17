@@ -1,10 +1,6 @@
 # Import Python modules
-import socket
-import pickle
 import pygame
 from pygame.locals import *
-import random
-import os
 
 # Import custom modules
 from data.menu import Menu
@@ -12,102 +8,95 @@ from data.game import Game
 from data.server import Server
 from data.client import Client
 
+# Play game function
+def play_game(player, send_data_func, receive_data_func):
+    # Set running to True
+    running = True
+
+    # Game loop
+    while running:
+        # Player plays a card
+        game.show_hud(player) # Show HUD of the player
+        card_index1, played_data1 = game.select_card(player)
+
+        # Send data to the opponent
+        send_data_func(card_index1, played_data1)
+
+        # Receive data from the opponent
+        card_index2, played_data2 = receive_data_func()
+
+        # Check who wins the round, return the winner
+        if player == player1: # If player is server (player1)
+            round_winner = game.compare_cards(played_data1, played_data2)
+        else: # If player is client (player2)
+            round_winner = game.compare_cards(played_data2, played_data1)
+
+        # Show who wins the round
+        game.win_round(round_winner)
+
+        # Check if there is a game winner, return the winner or 0 if there is no winner
+        game_winner = game.check_winner()
+
+        # If there is a game winner, show the winner and return the winner
+        if game_winner > 0:
+            game.win_game(game_winner) # Show winner screen
+            running = False # Set running to False
+            return game_winner # 1 = Server, 2 = Client
+
+        # Create a new round, draw new cards and increase the round number
+        if player == player1: # If player is server (player1)
+            game.new_round(card_index1, card_index2)
+        else: # If player is client (player2)
+            game.new_round(card_index2, card_index1)
+
+
 # Main function
 if __name__ == "__main__":
-    # Main game loop
-
     # Initialize pygame
     pygame.init()
 
     # Set window title
     pygame.display.set_caption("Teyeliz")
 
-    # Set window size
+    # create window
     WINDOW_SIZE = (760, 412)
     WIDTH, HEIGHT = WINDOW_SIZE
-
-    # Create window
     window = pygame.display.set_mode(WINDOW_SIZE)
 
-    # Load background image and scale
-    background_image = pygame.image.load("resources/graphics/bg/background.png")
-    background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
+    # Load font
+    font = pygame.font.Font("resources/fonts/PressStart2PRegular.ttf", 8)
 
-    # Create menu
-    menu = Menu()
+    pygame_data = [pygame.display, window, font]
 
-    # Show menu
-    player1, player2, socket_type = menu.show_menu()
+    # Create and show menu
+    menu = Menu(pygame_data)
+    player1, player2, socket_type = menu.show_menu() # Shows menu and returns player1, player2, and socket_type
 
     # Create game
     game = Game(player1, player2)
 
-    if socket_type == 0:  # Server
+    # Start the game depending on the socket type (server or client)
+    if socket_type == 0: # Server
+        # Create the server and start it
         server = Server()
-
-        # Start the server
         server.start_server()
 
-        while True:
-            # P1 plays a card
-            game.show_hud(player1)
-            card_index1, played_data1 = game.select_card(player1)
+        # Start the game
+        game_winner = play_game(player1, server.send_data, server.receive_data) # Player1 is server
 
-            # Send data to the client
-            server.send_data(card_index1, played_data1)
-
-            # Receive data from the client
-            card_index2, played_data2 = server.receive_data()
-
-            # Check who wins the round
-            round_winner = game.compare_cards(played_data1, played_data2)
-
-            # Show who wins the round
-            game.win_round(round_winner)
-
-            # Check if there is a game winner
-            game_winner = game.check_winner()
-
-            if game_winner > 0:
-                game.win_game(game_winner)
-                break
-
-            # Create new round
-            game.new_round(card_index1, card_index2)
-
+        # Close the server
         server.close_server()
 
-    elif socket_type == 1:  # Client
+    else: # Client
+        # Create the client and connect to the server
         client = Client()
-
-        # Connect to the server
         client.connect_to_server()
 
-        while True:
-            # P2 plays a card
-            game.show_hud(player2)
-            card_index2, played_data2 = game.select_card(player2)
-
-            # Send data to the server
-            client.send_data(card_index2, played_data2)
-
-            # Receive data from the server
-            card_index1, played_data1 = client.receive_data()
-
-            # Check who wins the round
-            round_winner = game.compare_cards(played_data1, played_data2)
-
-            # Show who wins the round
-            game.win_round(round_winner)
-
-            # Check if there is a game winner
-            game_winner = game.check_winner()
-
-            if game_winner > 0:
-                game.win_game(game_winner)
-                break
-
-            # Create new round
-            game.new_round(card_index1, card_index2)
-
+        # Start the game
+        game_winner = play_game(player2, client.send_data, client.receive_data) # Player2 is client
+        
+        # Close the client
         client.close_client()
+
+    # Close the game
+    pygame.quit()

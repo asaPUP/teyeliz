@@ -1,11 +1,12 @@
 """
-Teyetest - Clase Game
+Teyeliz - Clase Game
 """
 
 # Import Python modules
+import pygame
 
 # Import custom modules
-from card import Card
+from data.card import Card
 
 # Game class
 class Game():
@@ -17,6 +18,14 @@ class Game():
         self.played_data2 = None
 
         self.num_round = 1
+
+        # Load the game background and scale it
+        self.background = pygame.image.load("resources/graphics/bg/background.png")
+        self.background = pygame.transform.scale(self.background, (760, 412))
+
+        # Load the game over screen and scale it
+        self.game_over = pygame.image.load("resources/graphics/bg/over.png")
+        self.game_over = pygame.transform.scale(self.game_over, (760, 412))
 
     def select_card(self, player):
         print(f"\nPlayer '{player}':")

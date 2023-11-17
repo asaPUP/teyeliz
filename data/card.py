@@ -1,5 +1,5 @@
 """
-Teyetest - Clase Card
+Teyeliz - Clase Card
 """
 
 # Import Python modules
@@ -28,14 +28,14 @@ class Card():
         self.IMAGE_SIZE = (32, 52)
         self.THUMBNAIL_SIZE = (32, 32)
 
+        # Load the card image and scale it
         # Image depends of the cards element, color and power
-        self.image = pygame.image.load(f"resources/graphics/cards/{self.elements[self.element - 1]}/
-                                       {self.elements[self.element - 1]}{self.colors[self.color - 1]}{self.power}.png")
+        self.image = pygame.image.load(f"resources/graphics/cards/{self.elements[self.element - 1]}/{self.elements[self.element - 1]}{self.colors[self.color - 1]}{self.power}.png")
         self.image = pygame.transform.scale(self.image, self.IMAGE_SIZE)
 
+        # Load the card thumbnail and scale it
         # Thumbnail depends of the cards element and color, not power
-        self.thumbnail = pygame.image.load(f"resources/graphics/thumbnails/{self.elements[self.element - 1]}/
-                                           {self.elements[self.element - 1]}{self.colors[self.color - 1]}.png")
+        self.thumbnail = pygame.image.load(f"resources/graphics/thumbnails/{self.elements[self.element - 1]}/{self.elements[self.element - 1]}{self.colors[self.color - 1]}.png")
         self.thumbnail = pygame.transform.scale(self.thumbnail, self.THUMBNAIL_SIZE)
 
     def __str__(self):

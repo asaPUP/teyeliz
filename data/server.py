@@ -1,10 +1,11 @@
 """
-Teyetest - Clase Server
+Teyeliz - Clase Server
 """
 
 # Import Python modules
 import socket
 import pickle
+import pygame
 
 # Import custom modules
 
