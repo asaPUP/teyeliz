@@ -92,6 +92,7 @@ class Server():
         print(f"\nWaiting for Client data...\n")
         self.received_data = self.connection.recv(1024)
         card_index, played_data = pickle.loads(self.received_data)
+        print(f"\nReceived data from Client: {card_index}, {played_data}\n")
         return (card_index, played_data)
 
     def close_server(self):

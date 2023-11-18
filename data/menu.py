@@ -72,13 +72,13 @@ class Menu():
         # Start the game in the selected role
         if player_role == 1:
             # Start the game as the server
-            print("Starting the game as Server...")
+            print("\nStarting the game as Server...\n")
 
             self.socket = 0
 
         else:
             # Start the game as the client
-            print("Starting the game as Client...")
+            print("\nStarting the game as Client...\n")
 
             self.socket = 1
 

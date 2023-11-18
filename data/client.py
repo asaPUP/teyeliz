@@ -38,7 +38,7 @@ class Client():
             self.pygame_data[0].flip()
 
             print("\nServer is not available.")
-            print("Press ANY KEY to search again..")
+            print("Press ANY KEY to search again...\n")
 
             # Wait for the user to press ENTER
             pygame.event.clear()
@@ -64,6 +64,7 @@ class Client():
         print(f"\nWaiting for Server data...\n")
         self.received_data = self.client_socket.recv(1024)
         card_index, played_data = pickle.loads(self.received_data)
+        print(f"\nReceived data from Server: {card_index}, {played_data}\n")
         return (card_index, played_data)
     
     def close_client(self):
