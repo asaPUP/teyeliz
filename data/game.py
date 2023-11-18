@@ -96,12 +96,6 @@ class Game():
         # Update the pygame window
         self.pygame_data[0].flip()
 
-        # Show the played card in the termial
-        if player == self.player1:
-            print(f"\nPlayer '{player}' played card '{self.data_to_card(data)}'\n")
-        else:
-            print(f"\nPlayer '{player}' played card '{self.data_to_card(data)}'\n")
-
     def data_to_card(self, data):
         element = data[0]
         color = data[1]
@@ -113,10 +107,8 @@ class Game():
         self.played_data1 = data1
         self.played_data2 = data2
 
-        print(f"\n=====================================")
         self.show_played_card(self.player1, data1)
         self.show_played_card(self.player2, data2)
-        print(f"\n=====================================")
 
         time.sleep(1)
 
@@ -194,12 +186,10 @@ class Game():
         
     def win_round(self, round_winner):
         if round_winner == 0:
-            print("\nDraw!\n")
+            pass # Do nothing
         elif round_winner == 1:
-            print(f"\nPlayer '{self.player1}' wins the round!\n")
             self.player1.add_card_to_tictactoe(self.played_data1)
         else:
-            print(f"\nPlayer '{self.player2}' wins the round!\n")
             self.player2.add_card_to_tictactoe(self.played_data2)
     
     def show_hud(self, player = None):
@@ -215,23 +205,16 @@ class Game():
         text_rect.center = (380, 20)
         self.pygame_data[1].blit(text, text_rect)
 
-        print("\n=====================================")
-        print(f"\nRound {self.num_round}")
-        print(f"\nPlayer '{self.player1}' tictactoe:\n")
         self.player1.show_tictactoe()
-        print(f"\nPlayer '{self.player2}' tictactoe:\n")
         self.player2.show_tictactoe()
 
         if player == self.player1:
-            print(f"\nPlayer '{self.player1}' hand:\n")
             self.player1.show_hand()
         elif player == self.player2:
-            print(f"\nPlayer '{self.player2}' hand:\n")
             self.player2.show_hand()
-        print("\n=====================================")
 
         # Update the pygame window
-        pygame.display.flip()
+        self.pygame_data[0].flip()
 
     def check_winner(self):
         if self.player1.check_tictactoe():
@@ -264,16 +247,6 @@ class Game():
         self.pygame_data[1].blit(text2, text_rect2)
 
         self.pygame_data[0].flip()
-
-        # Show the winner on the pygame window
-        print(f"\n=====================================")
-        if game_winner == 1:
-            print(f"\nPlayer '{self.player1}' tictactoe:\n")
-            print(f"\nPlayer '{self.player1}' wins the game!\n")
-        elif game_winner == 2:
-            print(f"\nPlayer '{self.player2}' tictactoe:\n")
-            print(f"\nPlayer '{self.player2}' wins the game!\n")
-        print(f"\n=====================================")
 
     def new_round(self, card_index1, card_index2):
         self.player1.draw_card(card_index1)

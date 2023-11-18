@@ -59,6 +59,7 @@ class Server():
         # Non blocking accept so pygame can still run
         self.server_socket.setblocking(False)
 
+        # Show a message in the console
         print("\nWaiting for Client to connect...\n")
 
         # Wait for the client to connect

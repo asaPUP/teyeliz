@@ -29,11 +29,6 @@ class Menu():
         self.pygame_data[1].blit(self.title, (0, 0))
         pygame.display.flip()
 
-        # Select if the player is the server or the client from the menu pygame screen
-        print("Select your role:")
-        print("1. Server")
-        print("2. Client")
-
         # Load the text "Select your role
         font = self.pygame_data[2]
         text = font.render("Select your role:", True, (255, 255, 255))
@@ -77,14 +72,12 @@ class Menu():
         # Start the game in the selected role
         if player_role == 1:
             # Start the game as the server
-            print("Selected role 1")
             print("Starting the game as Server...")
 
             self.socket = 0
 
         else:
             # Start the game as the client
-            print("Selected role 2")
             print("Starting the game as Client...")
 
             self.socket = 1

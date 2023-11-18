@@ -119,19 +119,6 @@ class Player():
         # Update the pygame window
         self.pygame_data[0].flip()
     
-        # Show the player's tictactoe in the console
-        print("  R T A") # R = Rosa, T = Turquesa, A = Amarillo
-        for i in range(3):
-            if i == 0:      # Fuego
-                print("F", end=" ")
-            elif i == 1:    # Agua
-                print("A", end=" ")
-            else:           # Planta
-                print("P", end=" ")
-            for j in range(3):
-                print(f"{self.tictactoe[i][j]}", end=" ")
-            print()
-    
     def __str__(self):
         if self.socket == 0:
             return "Server"
