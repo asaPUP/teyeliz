@@ -89,7 +89,7 @@ class Server():
         self.connection.send(self.data_pickle)
 
     def receive_data(self):
-        print(f"\nWaiting for 'Client' to play a card...\n")
+        print(f"\nWaiting for Client data...\n")
         self.received_data = self.connection.recv(1024)
         card_index, played_data = pickle.loads(self.received_data)
         return (card_index, played_data)

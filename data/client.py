@@ -38,19 +38,19 @@ class Client():
             self.pygame_data[0].flip()
 
             print("\nServer is not available.")
-            print("Press ENTER to try again...\n")
+            print("Press ANY KEY to search again..")
 
             # Wait for the user to press ENTER
             pygame.event.clear()
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_RETURN:
-                            self.connect_to_server()
-                            return
                         if event.key == pygame.K_ESCAPE:
                             pygame.quit()
                             quit()
+                        else:
+                            self.connect_to_server()
+                            return
                     elif event.type == pygame.QUIT:
                         pygame.quit()
                         quit()
@@ -61,7 +61,7 @@ class Client():
         self.client_socket.send(self.data_pickle)
 
     def receive_data(self):
-        print(f"\nWaiting for 'Server' to play a card...\n")
+        print(f"\nWaiting for Server data...\n")
         self.received_data = self.client_socket.recv(1024)
         card_index, played_data = pickle.loads(self.received_data)
         return (card_index, played_data)

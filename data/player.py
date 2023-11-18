@@ -94,10 +94,6 @@ class Player():
             self.pygame_data[1].blit(card_image, card_image_rect)
         # Update the pygame window
         self.pygame_data[0].flip()
-
-        # Show the player's hand in the console
-        for i in range(5):
-            print(f"{i + 1}. {self.hand[i]}")
     
     def show_tictactoe(self):
         # Show the player's tictactoe in the pygame window

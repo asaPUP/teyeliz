@@ -32,8 +32,6 @@ class Game():
         self.pygame_data = pygame_data
 
     def select_card(self, player):
-        print(f"\nPlayer '{player}':")
-
         # Select a card to play from the pygame window instead of the console
         pygame.event.clear()
 
