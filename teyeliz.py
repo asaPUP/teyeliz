@@ -15,6 +15,23 @@ def play_game(player, send_data_func, receive_data_func):
 
     # Game loop
     while running:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if player == player1:
+                        server.close_server()
+                    else:
+                        client.close_client()
+                    pygame.quit()
+                    quit()
+            if event.type == pygame.QUIT:
+                if player == player1:
+                    server.close_server()
+                else:
+                    client.close_client()
+                pygame.quit()
+                quit()
+
         # Player plays a card
         game.show_hud(player) # Show HUD of the player
         card_index1, played_data1 = game.select_card(player)
@@ -59,7 +76,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("Teyeliz")
 
     # create window
-    WINDOW_SIZE = (760, 412)
+    WINDOW_SIZE = (760, 412) # Half is 380, 206
     WIDTH, HEIGHT = WINDOW_SIZE
     window = pygame.display.set_mode(WINDOW_SIZE)
 
@@ -73,12 +90,12 @@ if __name__ == "__main__":
     player1, player2, socket_type = menu.show_menu() # Shows menu and returns player1, player2, and socket_type
 
     # Create game
-    game = Game(player1, player2)
+    game = Game(player1, player2, pygame_data)
 
     # Start the game depending on the socket type (server or client)
     if socket_type == 0: # Server
         # Create the server and start it
-        server = Server()
+        server = Server(pygame_data)
         server.start_server()
 
         # Start the game
@@ -89,7 +106,7 @@ if __name__ == "__main__":
 
     else: # Client
         # Create the client and connect to the server
-        client = Client()
+        client = Client(pygame_data)
         client.connect_to_server()
 
         # Start the game

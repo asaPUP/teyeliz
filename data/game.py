@@ -10,7 +10,7 @@ from data.card import Card
 
 # Game class
 class Game():
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, pygame_data):
         self.player1 = p1
         self.player2 = p2
 
@@ -26,6 +26,9 @@ class Game():
         # Load the game over screen and scale it
         self.game_over = pygame.image.load("resources/graphics/bg/over.png")
         self.game_over = pygame.transform.scale(self.game_over, (760, 412))
+
+        # Pyagme data = [pygame.display, window, font]
+        self.pygame_data = pygame_data
 
     def select_card(self, player):
         print(f"\nPlayer '{player}':")
@@ -95,6 +98,18 @@ class Game():
             self.player2.add_card_to_tictactoe(self.played_data2)
     
     def show_hud(self, player = None):
+        # Show the game background
+        self.pygame_data[1].blit(self.background, (0, 0))
+
+        # Show the round number
+        font = self.pygame_data[2]
+        text = font.render(f"{self.num_round}", True, (255, 255, 255))
+        # Resize the text
+        text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
+        text_rect = text.get_rect()
+        text_rect.center = (380, 20)
+        self.pygame_data[1].blit(text, text_rect)
+
         print("\n=====================================")
         print(f"\nRound {self.num_round}")
         print(f"\nPlayer '{self.player1}' tictactoe:\n")
@@ -109,6 +124,9 @@ class Game():
             print(f"\nPlayer '{self.player2}' hand:\n")
             self.player2.show_hand()
         print("\n=====================================")
+
+        # Update the pygame window
+        pygame.display.flip()
 
     def check_winner(self):
         if self.player1.check_tictactoe():

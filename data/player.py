@@ -3,13 +3,14 @@ Teyeliz - Clase Player
 """
 
 # Import Python modules
+import pygame
 
 # Import custom modules
 from data.card import Card
 
 # Player class
 class Player():
-    def __init__(self, s=None):
+    def __init__(self, s=None, pygame_data=None):
         if s is None:
             s = 0 # Player is the server
         
@@ -18,6 +19,9 @@ class Player():
         self.tictactoe = [[0, 0, 0],
                           [0, 0, 0],
                           [0, 0, 0]]
+        
+        # Pyagme data = [pygame.display, window, font]
+        self.pygame_data = pygame_data
         
     def play_card(self, position):
         element = self.hand[position].element
@@ -51,6 +55,11 @@ class Player():
         return False
 
     def show_hand(self):
+        # Show the player's hand in the pygame window
+        for i in range(5):
+            self.pygame_data[1].blit(self.hand[i].image, (i * 152, 412 - 206))
+
+
         for i in range(5):
             print(f"{i + 1}. {self.hand[i]}")
     
