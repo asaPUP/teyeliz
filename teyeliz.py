@@ -35,9 +35,6 @@ def play_game(player, send_data_func, receive_data_func):
         # Send data to the opponent
         send_data_func(card_index1, played_data1)
 
-        # Evita el mensaje de "No responde" en la ventana de pygame
-        pygame.event.clear()
-
         # Receive data from the opponent
         card_index2, played_data2 = receive_data_func()
 
@@ -67,6 +64,9 @@ def play_game(player, send_data_func, receive_data_func):
         else: # If player is client (player2)
             game.new_round(card_index2, card_index1)
 
+        # Reset the event queue
+        pygame.event.clear()
+
     # Encierra el tic tac toe del ganador en un rectangulo transparente de borde blanco
     if game_winner == 1:
         pygame.draw.rect(window, (255, 255, 255), (62, 62, 154, 154), 5)
@@ -87,6 +87,12 @@ def play_game(player, send_data_func, receive_data_func):
 if __name__ == "__main__":
     # Initialize pygame
     pygame.init()
+
+    # Block mouse events
+    pygame.event.set_blocked(pygame.MOUSEWHEEL)
+    pygame.event.set_blocked(pygame.MOUSEMOTION)
+    pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+    pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
 
     # Set window title
     pygame.display.set_caption("Teyeliz")
