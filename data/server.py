@@ -34,14 +34,6 @@ class Server():
         self.server_socket.bind(self.binding_address)
         self.server_socket.listen(1)
 
-        # Show a window, with the text "Waiting for Client to connect..."
-        font = self.pygame_data[2]
-        text = font.render("Waiting for Client to connect...", True, (255, 255, 255))
-        text_rect = text.get_rect()
-        text_rect.center = (380, 206)
-        self.pygame_data[1].blit(text, text_rect)
-        self.pygame_data[0].flip()
-
         # Non blocking accept so pygame can still run
         self.server_socket.setblocking(False)
 
@@ -50,7 +42,8 @@ class Server():
     def wait_for_client(self):
         # Show a window, with the text "Waiting for Client to connect..."
         font = self.pygame_data[2]
-        text = font.render("Waiting for Client to connect...", True, (255, 255, 255))
+        text = font.render("Esperando a que el Cliente se conecte...", True, (255, 255, 255))
+        text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
         text_rect = text.get_rect()
         text_rect.center = (380, 206)
         self.pygame_data[1].blit(text, text_rect)
@@ -60,7 +53,7 @@ class Server():
         self.server_socket.setblocking(False)
 
         # Show a message in the console
-        print("\nWaiting for Client to connect...\n")
+        print("\nEsperando a que el Cliente se conecte...\n")
 
         # Wait for the client to connect
         for event in pygame.event.get():
@@ -76,7 +69,7 @@ class Server():
 
         try:
             self.connection, self.address = self.server_socket.accept()
-            print(f"\nConnection from {self.address} has been established.\n")
+            print(f"\nSe establecio coneccion con: {self.address}\n")
             pygame.event.clear()
             return
         except:
@@ -89,10 +82,17 @@ class Server():
         self.connection.send(self.data_pickle)
 
     def receive_data(self):
-        print(f"\nWaiting for Client data...\n")
+        print(f"\nEsperando los datos del Cliente...\n")
+
         self.received_data = self.connection.recv(1024)
-        card_index, played_data = pickle.loads(self.received_data)
-        print(f"\nReceived data from Client: {card_index}, {played_data}\n")
+
+        try:
+            card_index, played_data = pickle.loads(self.received_data)
+            print(f"\nRecibido del Cliente: index = {card_index}, data = {played_data}\n")
+        except:
+            card_index, played_data = None, None
+            print(f"\nCliente fuera de linea.\n")
+            
         return (card_index, played_data)
 
     def close_server(self):

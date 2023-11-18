@@ -189,6 +189,9 @@ class Game():
             self.player1.add_card_to_tictactoe(self.played_data1)
         else:
             self.player2.add_card_to_tictactoe(self.played_data2)
+        
+        self.player1.show_tictactoe()
+        self.player2.show_tictactoe()
     
     def show_hud(self, player = None):
         # Show the game background
@@ -228,13 +231,13 @@ class Game():
 
         # Show if the player won or lost
         if game_winner == player:
-            text = self.pygame_data[2].render("You win!", True, (255, 255, 255))
+            text = self.pygame_data[2].render("GANASTE!", True, (255, 255, 255))
             text = pygame.transform.scale(text, (text.get_width() * 3, text.get_height() * 3))
         else:
-            text = self.pygame_data[2].render("You lose!", True, (255, 255, 255))
+            text = self.pygame_data[2].render("PERDISTE!", True, (255, 255, 255))
             text = pygame.transform.scale(text, (text.get_width() * 3, text.get_height() * 3))
         
-        text2 = self.pygame_data[2].render("Press ANY KEY to exit...", True, (255, 255, 255))
+        text2 = self.pygame_data[2].render("[CUALQUIER TECLA] para cerrar...", True, (255, 255, 255))
         text2 = pygame.transform.scale(text2, (text2.get_width() * 2, text2.get_height() * 2))
         
         text_rect = text.get_rect()

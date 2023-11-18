@@ -35,8 +35,15 @@ def play_game(player, send_data_func, receive_data_func):
         # Send data to the opponent
         send_data_func(card_index1, played_data1)
 
+        # Evita el mensaje de "No responde" en la ventana de pygame
+        pygame.event.clear()
+
         # Receive data from the opponent
         card_index2, played_data2 = receive_data_func()
+
+        # Check if the opponent is still connected
+        if card_index2 is None or played_data2 is None: # If the opponent is not connected
+            return
 
         # Check who wins the round, return the winner
         if player == player1: # If player is server (player1)
@@ -60,19 +67,16 @@ def play_game(player, send_data_func, receive_data_func):
         else: # If player is client (player2)
             game.new_round(card_index2, card_index1)
 
-    # When the game is over, show the screen still for 2 seconds
     # Encierra el tic tac toe del ganador en un rectangulo transparente de borde blanco
     if game_winner == 1:
-        # El cuadrado va de (62, 62) a (216, 216)
         pygame.draw.rect(window, (255, 255, 255), (62, 62, 154, 154), 5)
         pygame.display.flip()
     else:
-        # El cuadrado va de (544, 62) a (698, 216)
         pygame.draw.rect(window, (255, 255, 255), (544, 62, 154, 154), 5)
         pygame.display.flip()
     time.sleep(3)
 
-    # Show the winner screen
+    # Muestra la pantalla de fin de juego
     if player == player1:
         game.win_game(game_winner, 1)
     else:
@@ -86,6 +90,9 @@ if __name__ == "__main__":
 
     # Set window title
     pygame.display.set_caption("Teyeliz")
+
+    # Set window icon
+    icon = pygame.image.load("resources/graphics/icons/iconMetl.png")
 
     # create window
     WINDOW_SIZE = (760, 412) # Half is 380, 206
@@ -127,7 +134,7 @@ if __name__ == "__main__":
         # Close the client
         client.close_client()
 
-    # Wait for the user to press ANY KEY to exit or R to restart
+    # Espera a que el usuario presione CUALQUIER TECLA para salir
     pygame.event.clear()
     while True:
         for event in pygame.event.get():

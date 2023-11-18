@@ -27,18 +27,20 @@ class Client():
         except ConnectionRefusedError:
             # Show a window, with the text "Server is not available.\nPress ENTER to try again..."
             font = self.pygame_data[2]
-            text = font.render("Server is not available.", True, (255, 255, 255))
-            text2 = font.render("Press ENTER to try again...", True, (255, 255, 255))
+            text = font.render("El servidor no esta disponible.", True, (255, 255, 255))
+            text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
+            text2 = font.render("[CUALQUIER TECLA] para reintentar...", True, (255, 255, 255))
+            text2 = pygame.transform.scale(text2, (text2.get_width() * 2, text2.get_height() * 2))
             text_rect = text.get_rect()
             text_rect2 = text2.get_rect()
             text_rect.center = (380, 206)
-            text_rect2.center = (380, 226)
+            text_rect2.center = (380, 236)
             self.pygame_data[1].blit(text, text_rect)
             self.pygame_data[1].blit(text2, text_rect2)
             self.pygame_data[0].flip()
 
-            print("\nServer is not available.")
-            print("Press ANY KEY to search again...\n")
+            print("\nEl servidor no esta disponible.")
+            print("Presiona [CUALQUIER TECLA] para reintentar...\n")
 
             # Wait for the user to press ENTER
             pygame.event.clear()
@@ -61,10 +63,17 @@ class Client():
         self.client_socket.send(self.data_pickle)
 
     def receive_data(self):
-        print(f"\nWaiting for Server data...\n")
+        print(f"\nEsperando los datos del Servidor...\n")
+
         self.received_data = self.client_socket.recv(1024)
-        card_index, played_data = pickle.loads(self.received_data)
-        print(f"\nReceived data from Server: {card_index}, {played_data}\n")
+
+        try:
+            card_index, played_data = pickle.loads(self.received_data)
+            print(f"\nRecibido del Servidor: index = {card_index}, data = {played_data}\n")
+        except:
+            card_index, played_data = None, None
+            print("\nServidor fuera de linea.\n")
+        
         return (card_index, played_data)
     
     def close_client(self):
