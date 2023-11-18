@@ -1,6 +1,7 @@
 # Import Python modules
 import pygame
 from pygame.locals import *
+import time
 
 # Import custom modules
 from data.menu import Menu
@@ -10,11 +11,8 @@ from data.client import Client
 
 # Play game function
 def play_game(player, send_data_func, receive_data_func):
-    # Set running to True
-    running = True
-
     # Game loop
-    while running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -22,15 +20,13 @@ def play_game(player, send_data_func, receive_data_func):
                         server.close_server()
                     else:
                         client.close_client()
-                    pygame.quit()
-                    quit()
+                    game.quit_game()
             if event.type == pygame.QUIT:
                 if player == player1:
                     server.close_server()
                 else:
                     client.close_client()
-                pygame.quit()
-                quit()
+                game.quit_game()
 
         # Player plays a card
         game.show_hud(player) # Show HUD of the player
@@ -56,15 +52,31 @@ def play_game(player, send_data_func, receive_data_func):
 
         # If there is a game winner, show the winner and return the winner
         if game_winner > 0:
-            game.win_game(game_winner) # Show winner screen
-            running = False # Set running to False
-            return game_winner # 1 = Server, 2 = Client
+            break
 
         # Create a new round, draw new cards and increase the round number
         if player == player1: # If player is server (player1)
             game.new_round(card_index1, card_index2)
         else: # If player is client (player2)
             game.new_round(card_index2, card_index1)
+
+    # When the game is over, show the screen still for 2 seconds
+    # Encierra el tic tac toe del ganador en un rectangulo transparente de borde blanco
+    if game_winner == 1:
+        # El cuadrado va de (62, 62) a (216, 216)
+        pygame.draw.rect(window, (255, 255, 255), (62, 62, 154, 154), 5)
+        pygame.display.flip()
+    else:
+        # El cuadrado va de (544, 62) a (698, 216)
+        pygame.draw.rect(window, (255, 255, 255), (544, 62, 154, 154), 5)
+        pygame.display.flip()
+    time.sleep(3)
+
+    # Show the winner screen
+    if player == player1:
+        game.win_game(game_winner, 1)
+    else:
+        game.win_game(game_winner, 2)
 
 
 # Main function
@@ -99,7 +111,7 @@ if __name__ == "__main__":
         server.start_server()
 
         # Start the game
-        game_winner = play_game(player1, server.send_data, server.receive_data) # Player1 is server
+        play_game(player1, server.send_data, server.receive_data) # Player1 is server
 
         # Close the server
         server.close_server()
@@ -110,10 +122,16 @@ if __name__ == "__main__":
         client.connect_to_server()
 
         # Start the game
-        game_winner = play_game(player2, client.send_data, client.receive_data) # Player2 is client
+        play_game(player2, client.send_data, client.receive_data) # Player2 is client
         
         # Close the client
         client.close_client()
 
-    # Close the game
-    pygame.quit()
+    # Wait for the user to press ANY KEY to exit or R to restart
+    pygame.event.clear()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                game.quit_game()
+            elif event.type == pygame.QUIT:
+                game.quit_game()
