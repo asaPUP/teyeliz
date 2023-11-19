@@ -44,10 +44,8 @@ class Server():
     def wait_for_client(self):
         # Show a window, with the text "Waiting for Client to connect..."
         font = self.pygame_data[2]
-        text = font.render(
-            "Esperando a que el Cliente se conecte...", True, (255, 255, 255))
-        text = pygame.transform.scale(
-            text, (text.get_width() * 2, text.get_height() * 2))
+        text = font.render("Esperando a que el Cliente se conecte...", True, (255, 255, 255))
+        text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
         text_rect = text.get_rect()
         text_rect.center = (380, 206)
         self.pygame_data[1].blit(text, text_rect)

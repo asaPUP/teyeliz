@@ -37,9 +37,8 @@ class Client():
                 text, (text.get_width() * 2, text.get_height() * 2))
             text2 = font.render(
                 "[CUALQUIER TECLA] para reintentar...", True, (255, 255, 255))
-            text2 = pygame.transform.scale(
-                text2, (text2.get_width() * 2, text2.get_height() * 2))
-            
+            text2 = pygame.transform.scale(text2, (text2.get_width() * 2, text2.get_height() * 2))
+
             text_rect = text.get_rect()
             text_rect2 = text2.get_rect()
 

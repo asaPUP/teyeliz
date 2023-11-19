@@ -9,20 +9,22 @@ import pygame
 from data.card import Card
 
 # Player class
+
+
 class Player():
     def __init__(self, s=None, pygame_data=None):
         if s is None:
-            s = 0 # Player is the server
-        
+            s = 0  # Player is the server
+
         self.socket = s
         self.hand = [Card() for i in range(5)]
         self.tictactoe = [[0, 0, 0],
                           [0, 0, 0],
                           [0, 0, 0]]
-        
+
         # Pyagme data = [pygame.display, window, font]
         self.pygame_data = pygame_data
-        
+
     def play_card(self, position):
         element = self.hand[position].element
         color = self.hand[position].color
@@ -37,7 +39,7 @@ class Player():
 
         # Show empty card image in the pygame window in the position of the played card
         # Each card is 32 x 52 pixels, scalet to 64 x 104 pixels
-        
+
         card_image = pygame.image.load("resources/graphics/cards/empty.png")
         card_image = pygame.transform.scale(card_image, (64, 104))
         card_image_rect = card_image.get_rect()
@@ -60,10 +62,10 @@ class Player():
         self.pygame_data[0].flip()
 
         return data
-    
+
     def draw_card(self, position):
         self.hand[position] = Card()
-    
+
     def add_card_to_tictactoe(self, data):
         element = data[0]
         color = data[1]
@@ -78,7 +80,7 @@ class Player():
         for j in range(3):
             if self.tictactoe[0][j] == self.tictactoe[1][j] == self.tictactoe[2][j] == 1:
                 return True
-        
+
         return False
 
     def show_hand(self):
@@ -93,7 +95,7 @@ class Player():
             self.pygame_data[1].blit(card_image, card_image_rect)
         # Update the pygame window
         self.pygame_data[0].flip()
-    
+
     def show_tictactoe(self):
         # Show the player's tictactoe in the pygame window
         # Each thumbnail is 32 x 32 pixels
@@ -113,12 +115,12 @@ class Player():
                     self.pygame_data[1].blit(thumbnail, thumbnail_rect)
         # Update the pygame window
         self.pygame_data[0].flip()
-    
+
     def __str__(self):
         if self.socket == 0:
             return "Servidor"
         else:
             return "Cliente"
-        
+
     def __repr__(self):
         return self.__str__()
