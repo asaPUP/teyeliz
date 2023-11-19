@@ -1,0 +1,11 @@
+# PYCACHE #
+data/__pycache__/
+__pycache__/
+
+# VIRTUAL ENVIRONMENT #
+.venv
+venv/
+
+# DS_STORE #
+.DS_Store
+resources/.DS_Store
