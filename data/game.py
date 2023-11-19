@@ -28,6 +28,9 @@ class Game():
         self.game_over = pygame.image.load("resources/graphics/bg/over.png")
         self.game_over = pygame.transform.scale(self.game_over, (760, 412))
 
+        # Load the logo
+        self.logo = pygame.image.load("resources/graphics/logo/logo.png")
+
         # Pyagme data = [pygame.display, window, font]
         self.pygame_data = pygame_data
 
@@ -200,15 +203,49 @@ class Game():
         # Show the round number
         font = self.pygame_data[2]
         text = font.render(f"{self.num_round}", True, (255, 255, 255))
+        text_ronda = font.render("RONDA", True, (255, 255, 255))
+
         # Resize the text
         text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
         text_rect = text.get_rect()
-        text_rect.center = (380, 20)
+        text_rect.center = (380, 26)
         self.pygame_data[1].blit(text, text_rect)
 
+        text_ronda = pygame.transform.scale(text_ronda, (text_ronda.get_width() * 0.8, text_ronda.get_height() * 0.8))
+        text_rect_ronda = text_ronda.get_rect()
+        text_rect_ronda.center = (380, 10)
+        self.pygame_data[1].blit(text_ronda, text_rect_ronda)
+
+        # Show "TU" and "OPONENTE" texts in the side of the pygame window it corresponds (left or right)
+        text_tu = font.render("TU", True, (255, 255, 255))
+        text_tu = pygame.transform.scale(text_tu, (text_tu.get_width() * 2, text_tu.get_height() * 2))
+        text_rect_tu = text_tu.get_rect()
+
+        text_oponente = font.render("OPONENTE", True, (255, 255, 255))
+        text_oponente = pygame.transform.scale(text_oponente, (text_oponente.get_width() * 2, text_oponente.get_height() * 2))
+        text_rect_oponente = text_oponente.get_rect()
+
+        if player == self.player1:
+            text_rect_tu.center = (140, 48)
+            self.pygame_data[1].blit(text_tu, text_rect_tu)
+            text_rect_oponente.center = (620, 48)
+            self.pygame_data[1].blit(text_oponente, text_rect_oponente)
+        elif player == self.player2:
+            text_rect_tu.center = (620, 48)
+            self.pygame_data[1].blit(text_tu, text_rect_tu)
+            text_rect_oponente.center = (140, 48)
+            self.pygame_data[1].blit(text_oponente, text_rect_oponente)
+
+        # Show the logo
+        logo_rect = self.logo.get_rect()
+        logo_rect.center = (380, 395)
+        self.pygame_data[1].blit(self.logo, logo_rect)
+
+        # Show the tictactoe of both players
         self.player1.show_tictactoe()
         self.player2.show_tictactoe()
 
+        # Show the hand of the player
         if player == self.player1:
             self.player1.show_hand()
         elif player == self.player2:
