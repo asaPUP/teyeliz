@@ -80,8 +80,7 @@ class Client():
         self.receive_data_helper()
 
         card_index, played_data = pickle.loads(self.received_data)
-        print(f"\nRecibido del Servidor: index = {
-              card_index}, data = {played_data}\n")
+        print(f"\nRecibido del Servidor: index = {card_index}, data = {played_data}\n")
 
         return (card_index, played_data)
 
