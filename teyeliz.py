@@ -1,18 +1,24 @@
-# Import Python modules
+"""
+Teyeliz - Un juego de cartas para dos juadores con websockets TCP y pygame
+"""
+
+# Importamos los modulos de python
 import pygame
 from pygame.locals import *
 import time
 
-# Import custom modules
+# Importamos los modulos del juego
 from data.menu import Menu
 from data.game import Game
 from data.server import Server
 from data.client import Client
 
-# Play game function
+# Funcion que ejecuta el juego
 def play_game(player, send_data_func, receive_data_func):
-    # Game loop
+    # Ciclo principal del juego
     while True:
+        # Captura los eventos del teclado
+        pygame.event.clear()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -28,46 +34,37 @@ def play_game(player, send_data_func, receive_data_func):
                     client.close_client()
                 game.quit_game()
 
-        # Player plays a card
-        game.show_hud(player) # Show HUD of the player
+        # El jugador selecciona una carta y la juega
+        game.show_hud(player) # Muestra el HUD del jugador
         card_index1, played_data1 = game.select_card(player)
 
-        # Send data to the opponent
+        # Envía los datos al oponente
         send_data_func(card_index1, played_data1)
 
-        # Receive data from the opponent
+        # Recibe los datos del oponente
         card_index2, played_data2 = receive_data_func()
 
-        # Check if the opponent is still connected
-        if card_index2 is None or played_data2 is None: # If the opponent is not connected
-            return
-
-        # Check who wins the round, return the winner
-        if player == player1: # If player is server (player1)
+        # Revisa cual jugador gana la ronda
+        if player == player1: # Si el jugador es el servidor (player1)
             round_winner = game.compare_cards(played_data1, played_data2)
-        else: # If player is client (player2)
+        else: # Si el jugador es el cliente (player2)
             round_winner = game.compare_cards(played_data2, played_data1)
 
-        # Show who wins the round
+        # Muestra el resultado de la ronda
         game.win_round(round_winner)
 
-        # Check if there is a game winner, return the winner or 0 if there is no winner
+        # Revisa si hay un ganador de la partida y si es asi, termina el juego
         game_winner = game.check_winner()
-
-        # If there is a game winner, show the winner and return the winner
         if game_winner > 0:
             break
 
-        # Create a new round, draw new cards and increase the round number
-        if player == player1: # If player is server (player1)
+        # Crea una nueva ronda
+        if player == player1: # Si player es server (player1)
             game.new_round(card_index1, card_index2)
-        else: # If player is client (player2)
+        else: # Si player es client (player2)
             game.new_round(card_index2, card_index1)
 
-        # Reset the event queue
-        pygame.event.clear()
-
-    # Encierra el tic tac toe del ganador en un rectangulo transparente de borde blanco
+    # Encierra la cuadricula del ganador en un cuadro blanco
     if game_winner == 1:
         pygame.draw.rect(window, (255, 255, 255), (62, 62, 154, 154), 5)
         pygame.display.flip()
@@ -83,64 +80,66 @@ def play_game(player, send_data_func, receive_data_func):
         game.win_game(game_winner, 2)
 
 
-# Main function
+# Funcion principal del programa
 if __name__ == "__main__":
-    # Initialize pygame
+    # Inicializa pygame
     pygame.init()
 
-    # Block mouse events
+    # Bloquea los eventos del mouse, ya que no se usan
     pygame.event.set_blocked(pygame.MOUSEWHEEL)
     pygame.event.set_blocked(pygame.MOUSEMOTION)
     pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
     pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
 
-    # Set window title
+    # Ponemos el titulo de la ventana
     pygame.display.set_caption("Teyeliz")
 
-    # Set window icon
+    # Ponemos el icono de la ventana
     icon = pygame.image.load("resources/graphics/icons/iconMetl.png")
+    pygame.display.set_icon(icon)
 
-    # create window
+    # Crea la ventana
     WINDOW_SIZE = (760, 412) # Half is 380, 206
     WIDTH, HEIGHT = WINDOW_SIZE
     window = pygame.display.set_mode(WINDOW_SIZE)
 
-    # Load font
+    # Carga la fuente
     font = pygame.font.Font("resources/fonts/PressStart2PRegular.ttf", 8)
 
+    # Empaqueta los datos de pygame en una lista
     pygame_data = [pygame.display, window, font]
 
-    # Create and show menu
+    # Muestra el menu y obtiene los datos del jugador y el tipo de socket
     menu = Menu(pygame_data)
-    player1, player2, socket_type = menu.show_menu() # Shows menu and returns player1, player2, and socket_type
+    player1, player2, socket_type = menu.show_menu()
 
-    # Create game
+    # Crea el juego
     game = Game(player1, player2, pygame_data)
 
-    # Start the game depending on the socket type (server or client)
-    if socket_type == 0: # Server
-        # Create the server and start it
+    # Inicia el juego, dependiendo del tipo de socket que se haya elegido
+    if socket_type == 0: # Servidor
+        # Crea el servidor y lo inicia
         server = Server(pygame_data)
         server.start_server()
 
-        # Start the game
+        # Llama a la funcion que ejecuta el juego, como servidor
         play_game(player1, server.send_data, server.receive_data) # Player1 is server
 
-        # Close the server
+        # Cierra el servidor
         server.close_server()
 
-    else: # Client
-        # Create the client and connect to the server
+    else: # Cliente
+        # Crea el cliente y se conecta al servidor
         client = Client(pygame_data)
         client.connect_to_server()
 
-        # Start the game
+        # Llama a la funcion que ejecuta el juego, como cliente
         play_game(player2, client.send_data, client.receive_data) # Player2 is client
         
-        # Close the client
+        # Cierra el cliente
         client.close_client()
 
-    # Espera a que el usuario presione CUALQUIER TECLA para salir
+    # Espera a que el usuario presione [CUALQUIER TECLA] para salir
     pygame.event.clear()
     while True:
         for event in pygame.event.get():
