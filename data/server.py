@@ -14,7 +14,10 @@ class Server():
     def __init__(self, pygame_data):
         # Inicializa el socket del servidor
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # AF_INET = IPv4, SOCK_STREAM = TCP
-        self.binding_address = ('localhost', 1357) # Direccion del servidor
+
+        self.ip_address = socket.gethostbyname(socket.gethostname()) # Direccion IP del servidor
+
+        self.binding_address = (self.ip_address, 7777) # Direccion del servidor a enlazar
 
         # Datos de la conexion
         self.connection = None

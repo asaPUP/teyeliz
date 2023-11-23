@@ -14,7 +14,10 @@ class Client():
     def __init__(self, pygame_data):
         # Inicializa el socket del cliente
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # AF_INET = IPv4, SOCK_STREAM = TCP
-        self.connection_address = ('localhost', 1357) # Direccion del servidor a conectarse
+
+        self.ip_address = socket.gethostbyname(socket.gethostname()) # Direccion IP del cliente
+
+        self.connection_address = (self.ip_address, 7777) # Direccion del servidor a la que se conecta
 
         # Datos a enviar al servidor y su pickle (serializacion)
         self.data_to_send = None
