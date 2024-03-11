@@ -1,36 +1,36 @@
 """
-Teyeliz - Main menu
+Teyeliz - Menu Class
 """
 
-# Imprtamos los modulos de python
+# Import Python modules
 import pygame
 
-# Importamos los modulos del juego
+# Import game modules
 from data.player import Player
 
-# Clase Menu
+# Menu class
 class Menu():
     # Constructor
     def __init__(self, pygame_data):
-        # Inicializa el socket a elegir
+        # Initialize the chosen socket
         self.socket = None
 
-        # Inicializa los jugadores
+        # Initialize players
         self.player1 = Player(0, pygame_data)
         self.player2 = Player(1, pygame_data)
 
-        # Recibe los datos de pygame
+        # Receive pygame data
         self.pygame_data = pygame_data
 
-        # Carga el fondo del menu y lo escala
+        # Load menu background and scale it
         self.title = pygame.image.load("resources/graphics/bg/title.png")
         self.title = pygame.transform.scale(self.title, (760, 412))
 
-        # Carga el logo y lo escala
+        # Load logo and scale it
         self.logo = pygame.image.load("resources/graphics/logo/logo.png")
         self.logo = pygame.transform.scale(self.logo, (self.logo.get_width() * 6, self.logo.get_height() * 6))
 
-        # Carga los iconos del menu y los escala
+        # Load menu icons and scale them
         self.tletl_icon = pygame.image.load("resources/graphics/icons/iconTletl.png")
         self.tletl_icon = pygame.transform.scale(self.tletl_icon, (self.tletl_icon.get_width() * 3, self.tletl_icon.get_height() * 3))
 
@@ -40,19 +40,19 @@ class Menu():
         self.metl_icon = pygame.image.load("resources/graphics/icons/iconMetl.png")
         self.metl_icon = pygame.transform.scale(self.metl_icon, (self.metl_icon.get_width() * 3, self.metl_icon.get_height() * 3))
 
-    # Funcion que muestra el menu
+    # Function to show the menu
     def show_menu(self):
-        # Muestra el fondo del menu
+        # Show menu background
         self.pygame_data[1].blit(self.title, (0, 0))
         pygame.display.flip()
 
-        # Carga el texto del menu y lo escala
+        # Load menu text and scale it
         font = self.pygame_data[2]
-        text = font.render("Selecciona un rol", True, (255, 255, 255))
+        text = font.render("Select a role", True, (255, 255, 255))
         text = pygame.transform.scale(text, (text.get_width() * 3, text.get_height() * 3))
-        text2 = font.render("[1] Servidor", True, (255, 255, 255))
+        text2 = font.render("[1] Server", True, (255, 255, 255))
         text2 = pygame.transform.scale(text2, (text2.get_width() * 3, text2.get_height() * 3))
-        text3 = font.render("[2] Cliente", True, (255, 255, 255))
+        text3 = font.render("[2] Client", True, (255, 255, 255))
         text3 = pygame.transform.scale(text3, (text3.get_width() * 3, text3.get_height() * 3))
         text_rect = text.get_rect()
         text_rect2 = text2.get_rect()
@@ -61,7 +61,7 @@ class Menu():
         text_rect2.center = (380, 340)
         text_rect3.center = (380, 380)
 
-        # Coloca un recuadro detras del texto
+        # Draw a rectangle behind the text
         pygame.draw.rect(self.pygame_data[1], (0, 0, 0), (text_rect.x - 4, text_rect.y - 4, text_rect.width + 4, text_rect.height + 4), 0)
         pygame.draw.rect(self.pygame_data[1], (0, 0, 0), (text_rect2.x - 4, text_rect2.y - 4, text_rect2.width + 4, text_rect2.height + 4), 0)
         pygame.draw.rect(self.pygame_data[1], (0, 0, 0), (text_rect3.x - 4, text_rect3.y - 4, text_rect3.width + 4, text_rect3.height + 4), 0)
@@ -70,12 +70,12 @@ class Menu():
         self.pygame_data[1].blit(text2, text_rect2)
         self.pygame_data[1].blit(text3, text_rect3)
 
-        # Carga el logo
+        # Load logo
         logo_rect = self.logo.get_rect()
         logo_rect.center = (380, 100)
         self.pygame_data[1].blit(self.logo, logo_rect)
 
-        # Cargo los iconos del menu
+        # Load menu icons
         tletl_icon_rect = self.tletl_icon.get_rect()
         tletl_icon_rect.center = (230, 220)
         self.pygame_data[1].blit(self.tletl_icon, tletl_icon_rect)
@@ -88,18 +88,18 @@ class Menu():
         metl_icon_rect.center = (530, 220)
         self.pygame_data[1].blit(self.metl_icon, metl_icon_rect)
 
-        # Actualiza la ventana de pygame
+        # Update pygame window
         pygame.display.flip()
 
-        # Obtiene el rol del jugador seleccionado
+        # Get the selected player role
         return self.select_role()
     
-    # Funcion que selecciona el rol del jugador
+    # Function to select the player role
     def select_role(self):
-        # Inicializa el rol del jugador
+        # Initialize player role
         player_role = None
 
-        # Obtiene la seleccion del jugador
+        # Get player selection
         pygame.event.clear()
         while True:
             for event in pygame.event.get():
@@ -119,20 +119,20 @@ class Menu():
             if player_role == 1 or player_role == 2:
                 break
 
-         # Establece el tipo de socket del jugador segun el rol seleccionado
+         # Set the player socket type according to the selected role
         if player_role == 1:
-            # Inicia el juego como servidor
-            print("\nIniciando juego como Servidor...\n")
+            # Start the game as server
+            print("\nStarting game as Server...\n")
             self.socket = 0
         else:
-            # Inicia el juego como cliente
-            print("\nIniciando juego como Cliente...\n")
+            # Start the game as client
+            print("\nStarting game as Client...\n")
             self.socket = 1
 
-        # Cambia el fondo del menu sin el texto
+        # Change menu background without text
         self.pygame_data[1].blit(self.title, (0, 0))
 
-        # Actualiza la ventana de pygame
+        # Update pygame window
         pygame.display.flip()
 
         return (self.player1, self.player2, self.socket)

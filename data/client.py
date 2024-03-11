@@ -1,46 +1,46 @@
 """
-Teyeliz - Clase Client
+Teyeliz - Client Class
 """
 
-# Importamos los modulos de python
+# Import Python modules
 import socket
 import pickle
 import pygame
 import time
 
-# Clase Client
+# Client class
 class Client():
     # Constructor
     def __init__(self, pygame_data):
-        # Inicializa el socket del cliente
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # AF_INET = IPv4, SOCK_STREAM = TCP
+        # Initialize the client socket
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET = IPv4, SOCK_STREAM = TCP
 
-        self.ip_address = socket.gethostbyname(socket.gethostname()) # Direccion IP del cliente
+        self.ip_address = socket.gethostbyname(socket.gethostname())  # Client's IP address
 
-        self.connection_address = (self.ip_address, 7777) # Direccion del servidor a la que se conecta
+        self.connection_address = (self.ip_address, 7777)  # Server's address to connect to
 
-        # Datos a enviar al servidor y su pickle (serializacion)
+        # Data to send to the server and its pickle (serialization)
         self.data_to_send = None
         self.data_pickle = None
 
-        # Datos recibidos del servidor
+        # Data received from the server
         self.received_data = None
 
-        # Recibe los datos de pygame
+        # Receive pygame data
         self.pygame_data = pygame_data
 
-    # Funcion que conecta al cliente con el servidor
+    # Function to connect the client to the server
     def connect_to_server(self):
-        try: # Intenta conectarse al servidor
+        try:  # Attempt to connect to the server
             self.client_socket.connect(self.connection_address)
-            print(f"\nSe establecio coneccion con: {self.connection_address}\n")
-        except ConnectionRefusedError: # Si no se puede conectar al servidor reintenta la conexion
-            # Muestra un mensaje de error en la pantalla de pygame
+            print(f"\nConnection established with: {self.connection_address}\n")
+        except ConnectionRefusedError:  # If unable to connect to the server, retry connection
+            # Display an error message on the pygame screen
             font = self.pygame_data[2]
 
-            text = font.render("El servidor no esta disponible.", True, (255, 255, 255))
+            text = font.render("The server is not available.", True, (255, 255, 255))
             text = pygame.transform.scale(text, (text.get_width() * 2, text.get_height() * 2))
-            text2 = font.render("[CUALQUIER TECLA] para reintentar...", True, (255, 255, 255))
+            text2 = font.render("[ANY KEY] to retry...", True, (255, 255, 255))
             text2 = pygame.transform.scale(text2, (text2.get_width() * 2, text2.get_height() * 2))
 
             text_rect = text.get_rect()
@@ -52,14 +52,14 @@ class Client():
             self.pygame_data[1].blit(text, text_rect)
             self.pygame_data[1].blit(text2, text_rect2)
 
-            # Actualiza la pantalla de pygame
+            # Update the pygame screen
             self.pygame_data[0].flip()
 
-            # Imprime un mensaje en la consola
-            print("\nEl servidor no esta disponible.")
-            print("Presiona [CUALQUIER TECLA] para reintentar...\n")
+            # Print a message in the console
+            print("\nThe server is not available.")
+            print("Press [ANY KEY] to retry...\n")
 
-            # Espera a que el usuario presione [CUALQUIER TECLA] para reintentar
+            # Wait for the user to press [ANY KEY] to retry
             pygame.event.clear()
             while True:
                 for event in pygame.event.get():
@@ -74,27 +74,27 @@ class Client():
                         pygame.quit()
                         quit()
 
-    # Funcion que envia los datos de la carta jugada al servidor
+    # Function to send played card data to the server
     def send_data(self, card_index, played_data):
         self.data_to_send = (card_index, played_data)
         self.data_pickle = pickle.dumps(self.data_to_send)
         self.client_socket.send(self.data_pickle)
 
-    # Funcion que recibe los datos de la carta jugada por el servidor
+    # Function to receive played card data from the server
     def receive_data(self):
-        # Imprime un mensaje en la consola
-        print(f"\nEsperando los datos del Servidor...\n")
+        # Print a message in the console
+        print(f"\nWaiting for data from the Server...\n")
 
-        # Recibe los datos del servidor
+        # Receive data from the server
         self.receive_data_helper()
 
-        # Deserializa los datos recibidos
+        # Deserialize received data
         card_index, played_data = pickle.loads(self.received_data)
-        print(f"\nRecibido del Servidor: index = {card_index}, data = {played_data}\n")
+        print(f"\nReceived from the Server: index = {card_index}, data = {played_data}\n")
 
         return (card_index, played_data)
 
-    # Funcion auxiliar que recibe los datos del servidor
+    # Auxiliary function to receive data from the server
     def receive_data_helper(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -107,14 +107,14 @@ class Client():
                 pygame.quit()
                 quit()
 
-        try: # Intenta recibir los datos del servidor
+        try:  # Attempt to receive data from the server
             self.client_socket.settimeout(0)
             self.received_data = self.client_socket.recv(1024)
             self.client_socket.settimeout(None)
-        except: # Si no se reciben los datos del servidor se intenta de nuevo tras 0.5 segundos
+        except:  # If data from the server is not received, attempt again after 0.5 seconds
             time.sleep(0.5)
             self.receive_data_helper()
 
-    # Funcion que cierra el socket del cliente
+    # Function to close the client socket
     def close_client(self):
         self.client_socket.close()

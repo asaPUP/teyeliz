@@ -1,16 +1,16 @@
 """
-Teyeliz - Clase Card
+Teyeliz - Card Class
 """
 
-# Importamos los modulos de python
+# Import Python modules
 from random import randint
 import pygame
 
-# Clase Card
+# Card class
 class Card():
     # Constructor
     def __init__(self, e=None, c=None, p=None):
-        # Si no se especifica el elemento, color o poder de la carta, se asigna uno aleatorio
+        # If element, color, or power of the card is not specified, assign a random one
         if e is None:
             e = randint(1, 3)
         if c is None:
@@ -18,31 +18,31 @@ class Card():
         if p is None:
             p = randint(1, 4)
 
-        # Lista de elementos y colores
-        self.elements = ["Tletl", "Atl", "Metl"] # Fuego, Agua, Planta
-        self.colors = ["Rosa", "Turquesa", "Dorado"]
+        # List of elements and colors
+        self.elements = ["Tletl", "Atl", "Metl"]  # Fire, Water, Plant
+        self.colors = ["Pink", "Turquoise", "Gold"]
         
-        # Asigna los valores de la carta
+        # Assign card values
         self.element = e
         self.color = c
         self.power = p
 
-        # Tamaño de la carta y su miniatura
+        # Card size and thumbnail size
         self.IMAGE_SIZE = (32, 52)
         self.THUMBNAIL_SIZE = (32, 32)
 
-        # Carga la imagen de la carta y la escala
+        # Load card image and scale it
         self.image = pygame.image.load(f"resources/graphics/cards/{self.elements[self.element - 1]}/{self.elements[self.element - 1]}{self.colors[self.color - 1]}{self.power}.png")
         self.image = pygame.transform.scale(self.image, self.IMAGE_SIZE)
 
-        # Cargo la miniatura de la carta y la escala
+        # Load card thumbnail and scale it
         self.thumbnail = pygame.image.load(f"resources/graphics/thumbnails/{self.elements[self.element - 1]}/{self.elements[self.element - 1]}{self.colors[self.color - 1]}.png")
         self.thumbnail = pygame.transform.scale(self.thumbnail, self.THUMBNAIL_SIZE)
 
-    # Define el metodo de string de la clase
+    # Define the string method of the class
     def __str__(self):
         return f"{self.elements[self.element - 1]} | {self.colors[self.color - 1]} | {self.power}"
     
-    # Define el metodo de representacion de la clase
+    # Define the representation method of the class
     def __repr__(self):
         return self.__str__()

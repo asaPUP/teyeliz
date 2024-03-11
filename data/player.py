@@ -1,56 +1,56 @@
 """
-Teyeliz - Clase Player
+Teyeliz - Player Class
 """
 
-# Importamos los modulos de python
+# Import Python modules
 import pygame
 
-# Importamos los modulos del juego
+# Import game modules
 from data.card import Card
 
-# Clase Player
+# Player class
 class Player():
     # Constructor
     def __init__(self, s=None, pygame_data=None):
-        # Si no se especifica el socket, se asigna 0 (servidor)
+        # If socket is not specified, assign 0 (server)
         if s is None:
             s = 0
 
-        # Asigna el socket tipo de socket (0 = servidor, 1 = cliente) del jugador
+        # Assign the player's socket type (0 = server, 1 = client)
         self.socket = s
 
-        # Inicializa la mano del jugador y su cuadricula
+        # Initialize player's hand and tic-tac-toe grid
         self.hand = [Card() for i in range(5)]
         self.tictactoe = [[0, 0, 0],
                           [0, 0, 0],
                           [0, 0, 0]]
 
-        # Recibe los datos de pygame
+        # Receive pygame data
         self.pygame_data = pygame_data
 
-    # Funcion que juega una carta
+    # Function to play a card
     def play_card(self, position):
-        # Obtiene la carta a jugar
+        # Get the card to play
         card = self.hand[position]
 
-        # Guarda los datos de la carta
+        # Save card data
         element = card.element
         color = card.color
         power = card.power
 
         data = (element, color, power)
 
-        # Elimina la carta de la mano
+        # Remove the card from the hand
         self.hand[position] = None
 
-        # Muestra una carta vacia en la ventana de pygame
+        # Show an empty card on the pygame window
         empty_card_image = pygame.image.load("resources/graphics/cards/empty.png")
         empty_card_image = pygame.transform.scale(empty_card_image, (64, 104))
         empty_card_image_rect = empty_card_image.get_rect()
         empty_card_image_rect.topleft = (138 + (106 * position), 259)
         self.pygame_data[1].blit(empty_card_image, empty_card_image_rect)
 
-        # Muestra la carta jugada en la ventana de pygame
+        # Show the played card on the pygame window
         card_image = card.image
         card_image = pygame.transform.scale(card_image, (96, 156))
         card_image_rect = card_image.get_rect()
@@ -60,39 +60,39 @@ class Player():
             card_image_rect.topleft = (410, 60)
         self.pygame_data[1].blit(card_image, card_image_rect)
 
-        # Actualiza la ventana de pygame
+        # Update the pygame window
         self.pygame_data[0].flip()
 
         return data
 
-    # Funcion que obtiene una nueva carta
+    # Function to draw a new card
     def draw_card(self, position):
         self.hand[position] = Card()
 
-    # Funcion que agrega una carta a la cuadricula
+    # Function to add a card to the tic-tac-toe grid
     def add_card_to_tictactoe(self, data):
         element = data[0]
         color = data[1]
 
         self.tictactoe[element - 1][color - 1] = 1
 
-    # Funcion que revisa si el jugador gano el juego
+    # Function to check if the player wins the game
     def check_tictactoe(self):
-        # Revisa si el jugador lleno una fila de su cuadricula
+        # Check if the player fills a row of the grid
         for i in range(3):
             if self.tictactoe[i][0] == self.tictactoe[i][1] == self.tictactoe[i][2] == 1:
                 return True
 
-        # Revisa si el jugador lleno una columna de su cuadricula
+        # Check if the player fills a column of the grid
         for j in range(3):
             if self.tictactoe[0][j] == self.tictactoe[1][j] == self.tictactoe[2][j] == 1:
                 return True
 
         return False
 
-    # Funcion que muestra la mano del jugador
+    # Function to show the player's hand
     def show_hand(self):
-        # Muestra las cartas en la ventana de pygame
+        # Show the cards on the pygame window
         for i in range(5):
             card = self.hand[i]
             card_image = card.image
@@ -101,18 +101,18 @@ class Player():
             card_image_rect.topleft = (138 + (106 * i), 259)
             self.pygame_data[1].blit(card_image, card_image_rect)
         
-        # Actualiza la ventana de pygame
+        # Update the pygame window
         self.pygame_data[0].flip()
 
-    # Funcion que muestra la cuadricula del jugador
+    # Function to show the player's tic-tac-toe grid
     def show_tictactoe(self):
-        # Lista de elementos y colores
+        # List of elements and colors
         element = ["Tletl", "Atl", "Metl"]
-        color = ["Rosa", "Turquesa", "Dorado"]
+        color = ["Pink", "Turquoise", "Gold"]
 
         for i in range(3):
             for j in range(3):
-                # Si la casilla no esta vacia, muestra la miniatura de la carta
+                # If the cell is not empty, show the card thumbnail
                 if self.tictactoe[i][j] == 1:
                     thumbnail = pygame.image.load(f"resources/graphics/thumbnails/{element[i]}/{element[i]}{color[j]}.png")
                     thumbnail = pygame.transform.scale(thumbnail, (32, 32))
@@ -123,16 +123,16 @@ class Player():
                         thumbnail_rect.topleft = (556 + (50 * j), 72 + (50 * i))
                     self.pygame_data[1].blit(thumbnail, thumbnail_rect)
 
-        # Actualiza la ventana de pygame
+        # Update the pygame window
         self.pygame_data[0].flip()
 
-    # Define el metodo de string de la clase
+    # Define the string method of the class
     def __str__(self):
         if self.socket == 0:
-            return "Servidor"
+            return "Server"
         else:
-            return "Cliente"
+            return "Client"
 
-    # Define el metodo de representacion de la clase
+    # Define the representation method of the class
     def __repr__(self):
         return self.__str__()
