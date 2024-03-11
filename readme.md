@@ -1,15 +1,15 @@
 # Teyeliz
 
-Teyeliz is a multiplayer card game built with Python and Pygame. It offers an engaging gaming experience where players can compete against each other via WebSockets, using a combination of strategy and luck.
+Teyeliz is a multiplayer card game built with Python and PyGame. It offers an engaging gaming experience where players can compete against each other via WebSockets, using a combination of strategy and luck.
 
 ## Overview:
 
-Teyeliz is a turn-based card game where two players, a server and a client, compete against each other. The game involves playing cards strategically to fill a grid and achieve victory conditions. The server manages the game state, while the client interacts with the player through a graphical user interface (GUI) built with Pygame.
+Teyeliz is a turn-based card game where two players, a server and a client, compete against each other. The game involves playing cards strategically to fill a grid and achieve victory conditions. The server manages the game state, while the client interacts with the player through a graphical user interface (GUI) built with PyGame.
 
 ## Gameplay:
 
-1. Each player starts with a hand of cards, each representing a combinations of different elements, levels and colors, and players take turns playing cards onto a desk.
-2. The winner of each round places their card on their tic-tac-toe grid,aiming to create lines (rows or columns) of their chosen element-color combinations.
+1. Each player starts with a hand of cards, each representing a combination of different elements, levels and colors, and players take turns playing cards on a desk.
+2. The winner of each round places their card on their tic-tac-toe grid, aiming to create lines (rows or columns) of their chosen element-color combinations.
 3. The game ends when a player successfully fills a line with their winner cards. Payers must strategize to block their opponent's moves while creating opportunities for their own victories.
 
 ## Nahuatl-Inspired Cards:
